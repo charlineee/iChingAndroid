@@ -11,7 +11,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = IChingBackground,
     onBackground = HexagramSubtext,
     onSurface = HexagramSubtext,
-    primary = Purple80,
+    primary = ChangingLineTint,
     secondary = PurpleGrey80,
     tertiary = Pink80
 )
@@ -21,18 +21,17 @@ private val LightColorScheme = lightColorScheme(
     surface = LineTint,
     onBackground = IChingBackground,
     onSurface = IChingBackground,
-    primary = Purple40,
+    primary = ChangingLineTint,
     secondary = PurpleGrey40,
     tertiary = Pink40
 )
 
 @Composable
 fun IchingandroidTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

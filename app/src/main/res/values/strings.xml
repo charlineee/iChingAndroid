@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ichingandroid</string>
+    <string name="cast_again">CAST AGAIN</string>
+    <string name="throw_coins">THROW COINS</string>
+    <string name="iching_chinese">易經</string>
+    <string name="book_of_changes">BOOK OF CHANGES</string>
 </resources>

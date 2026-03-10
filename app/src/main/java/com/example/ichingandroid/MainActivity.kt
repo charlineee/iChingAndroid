@@ -20,8 +20,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val systemDark = isSystemInDarkTheme()
-            var isDarkTheme by remember { mutableStateOf(systemDark) }
+            // default dark theme, changable by user
+            var isDarkTheme by remember { mutableStateOf(true) }
 
             IchingandroidTheme(darkTheme = isDarkTheme) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
