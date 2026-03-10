@@ -1,0 +1,21 @@
+# Built outputs
+/build/
+app/build/
+
+# Gradle
+.gradle/
+local.properties
+gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+/.idea/
+*.iml
+
+# Keys / secrets
+*.jks
+*.keystore
+google-services.json
+
+# macOS
+.DS_Store
+gradlew.bat
