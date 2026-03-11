@@ -88,7 +88,7 @@ class IChingViewModel : ViewModel() {
                 !l1 && !l2 && l3  -> 4  // ☶ Gen   — Mountain
                 l1  && !l2 && l3  -> 5  // ☴ Xun   — Wind
                 !l1 && l2  && l3  -> 6  // ☲ Li    — Fire
-                else               -> 7  // ☰ Qian  — Heaven
+                else              -> 7  // ☰ Qian  — Heaven
             }
         }
 

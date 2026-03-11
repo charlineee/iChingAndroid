@@ -115,7 +115,8 @@ fun IChing(
                 repeat(3) { i ->
                     Coin(
                         isFlipping = isFlipping,
-                        result = coinFaces[i]
+                        result = coinFaces[i],
+                        isDarkTheme = isDarkTheme
                     )
                 }
             }

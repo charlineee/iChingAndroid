@@ -28,10 +28,11 @@ import kotlin.math.roundToInt
 fun Coin(
     isFlipping: Boolean,
     result: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDarkTheme: Boolean = true
 ) {
     val offsetY = remember { Animatable(0f) }
-
+    val darkMode = isDarkTheme
     LaunchedEffect(isFlipping) {
         if (isFlipping) {
             // Arc up
@@ -50,7 +51,11 @@ fun Coin(
     }
 
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.catflipcoin2x)
+        if (darkMode) {
+            LottieCompositionSpec.RawRes(R.raw.catflipcoin2x)
+        } else {
+            LottieCompositionSpec.RawRes(R.raw.feathercoin2x)
+        }
     )
 
     Box(
@@ -66,10 +71,13 @@ fun Coin(
                 modifier = Modifier.fillMaxSize()
             )
         } else {
+            val imageRes = if (darkMode) {
+                if (result == "tails") R.drawable.tail5 else R.drawable.heads1
+            } else {
+                if (result == "tails") R.drawable.feather6 else R.drawable.egg1
+            }
             Image(
-                painter = painterResource(
-                    if (result == "tails") R.drawable.tail5 else R.drawable.heads1
-                ),
+                painter = painterResource(imageRes),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize()
             )
