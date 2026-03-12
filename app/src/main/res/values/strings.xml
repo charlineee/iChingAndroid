@@ -4,4 +4,10 @@
     <string name="throw_coins">THROW COINS</string>
     <string name="iching_chinese">易經</string>
     <string name="book_of_changes">BOOK OF CHANGES</string>
+    <string name="read_more">READ INTERPRETATION</string>
+    <string name="the_judgment">THE JUDGMENT</string>
+    <string name="image">THE IMAGE</string>
+    <string name="changing_lines">CHANGING LINES</string>
+    <string name="changing_to">CHANGING TO</string>
+    <string name="hexagram_label">Hexagram %1$d: %2$s</string>
 </resources>
