@@ -22,6 +22,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.ichingandroid.R
+import com.example.ichingandroid.ui.theme.LocalIsDarkTheme
 import kotlin.math.roundToInt
 
 @Composable
@@ -29,18 +30,15 @@ fun Coin(
     isFlipping: Boolean,
     result: String?,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = true
+    isDarkTheme: Boolean = LocalIsDarkTheme.current
 ) {
     val offsetY = remember { Animatable(0f) }
-    val darkMode = isDarkTheme
     LaunchedEffect(isFlipping) {
         if (isFlipping) {
-            // Arc up
             offsetY.animateTo(
                 targetValue = -500f,
                 animationSpec = tween(250, easing = FastOutLinearInEasing)
             )
-            // Arc down no spring
             offsetY.animateTo(
                 targetValue = 0f,
                 animationSpec = tween(350, easing = LinearOutSlowInEasing)
@@ -50,13 +48,13 @@ fun Coin(
         }
     }
 
-    val composition by rememberLottieComposition(
-        if (darkMode) {
-            LottieCompositionSpec.RawRes(R.raw.catflipcoin2x)
-        } else {
-            LottieCompositionSpec.RawRes(R.raw.feathercoin2x)
-        }
+    val darkComposition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.catflipcoin2x)
     )
+    val lightComposition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.feathercoin2x)
+    )
+    val composition = if (isDarkTheme) darkComposition else lightComposition
 
     Box(
         modifier = modifier
@@ -71,7 +69,7 @@ fun Coin(
                 modifier = Modifier.fillMaxSize()
             )
         } else {
-            val imageRes = if (darkMode) {
+            val imageRes = if (isDarkTheme) {
                 if (result == "tails") R.drawable.tail5 else R.drawable.heads1
             } else {
                 if (result == "tails") R.drawable.feather6 else R.drawable.egg1
