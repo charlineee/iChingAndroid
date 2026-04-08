@@ -9,3 +9,5 @@ A basic IChing app showing light and dark theme, hexagram generation, and interp
     </td>
   </tr>
 </table>
+
+Hexagram data sourced from [adamblvck/iching-wilhelm-dataset](https://github.com/adamblvck/iching-wilhelm-dataset), based on the Richard Wilhelm translation.
