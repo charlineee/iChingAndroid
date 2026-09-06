@@ -10,6 +10,7 @@ data object CastRoute : NavKey
 data class ResultRoute(
     val primaryHexNumber: Int,
     val relatingHexNumber: Int?,
-    val changingLineIndices: List<Int>
+    val changingLineIndices: List<Int>,
+    val question: String
 ) : NavKey
 

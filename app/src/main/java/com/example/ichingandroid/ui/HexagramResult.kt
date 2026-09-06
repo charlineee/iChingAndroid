@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,10 +36,13 @@ import com.example.ichingandroid.ui.theme.ChakraPetch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HexagramResult(
+    modifier: Modifier = Modifier,
     reading: HexagramResultViewModel.ReadingResult,
+    isSaved: Boolean = false,
     onBack: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onSave: () -> Unit = {},
 ) {
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,7 +60,7 @@ fun HexagramResult(
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back_content_description),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -75,136 +81,27 @@ fun HexagramResult(
                 .padding(innerPadding)
                 .padding(horizontal = 24.dp, vertical = 8.dp)
         ) {
-        // primary hexagram
-        Text(
-            text = stringResource(R.string.hexagram_label, reading.primaryHex.hex, reading.primaryName),
-            fontFamily = ChakraPetch,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-            letterSpacing = 3.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Text(
-            text = reading.primaryHex.tradChinese,
-            fontFamily = ChakraPetch,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-        )
-
-        Spacer(Modifier.height(24.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
-        Spacer(Modifier.height(24.dp))
-
-        // judgment
-        Text(
-            text = stringResource(R.string.the_judgment),
-            fontFamily = ChakraPetch,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
-            letterSpacing = 4.sp,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = reading.judgment,
-            fontFamily = ChakraPetch,
-            fontWeight = FontWeight.Light,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(Modifier.height(24.dp))
-
-        // image
-        Text(
-            text = stringResource(R.string.image),
-            fontFamily = ChakraPetch,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
-            letterSpacing = 4.sp,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = reading.image,
-            fontFamily = ChakraPetch,
-            fontWeight = FontWeight.Light,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // changing lines
-        if (reading.changingLines.isNotEmpty()) {
-            Spacer(Modifier.height(24.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
-            Spacer(Modifier.height(24.dp))
-
+            // primary hexagram
             Text(
-                text = stringResource(R.string.changing_lines),
+                text = stringResource(R.string.hexagram_label, reading.primaryHex.hex, reading.primaryName),
                 fontFamily = ChakraPetch,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-                letterSpacing = 4.sp,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(Modifier.height(8.dp))
-
-            reading.changingLines.forEach { (lineNum, text) ->
-                Text(
-                    text = "Line $lineNum",
-                    fontFamily = ChakraPetch,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = text,
-                    fontFamily = ChakraPetch,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(Modifier.height(12.dp))
-            }
-        }
-
-        // relating hexagram
-        reading.relatingHex?.let { relating ->
-            Spacer(Modifier.height(12.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
-            Spacer(Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(R.string.changing_to),
-                fontFamily = ChakraPetch,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-                letterSpacing = 4.sp,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = stringResource(R.string.hexagram_label, relating.hex, reading.relatingName ?: relating.english),
-                fontFamily = ChakraPetch,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
-                letterSpacing = 2.sp,
+                fontSize = 22.sp,
+                letterSpacing = 3.sp,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = relating.tradChinese,
+                text = reading.primaryHex.tradChinese,
                 fontFamily = ChakraPetch,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
 
             Spacer(Modifier.height(24.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
+            Spacer(Modifier.height(24.dp))
 
-            // relating judgment
+            // judgment
             Text(
                 text = stringResource(R.string.the_judgment),
                 fontFamily = ChakraPetch,
@@ -215,7 +112,7 @@ fun HexagramResult(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = relating.judgment.text,
+                text = reading.judgment,
                 fontFamily = ChakraPetch,
                 fontWeight = FontWeight.Light,
                 fontSize = 16.sp,
@@ -225,7 +122,7 @@ fun HexagramResult(
 
             Spacer(Modifier.height(24.dp))
 
-            // relating image
+            // image
             Text(
                 text = stringResource(R.string.image),
                 fontFamily = ChakraPetch,
@@ -236,16 +133,147 @@ fun HexagramResult(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = relating.image.text,
+                text = reading.image,
                 fontFamily = ChakraPetch,
                 fontWeight = FontWeight.Light,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.fillMaxWidth()
             )
-        }
 
-        Spacer(Modifier.height(32.dp))
+            // changing lines
+            if (reading.changingLines.isNotEmpty()) {
+                Spacer(Modifier.height(24.dp))
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
+                Spacer(Modifier.height(24.dp))
+
+                Text(
+                    text = stringResource(R.string.changing_lines),
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    letterSpacing = 4.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(8.dp))
+
+                reading.changingLines.forEach { (lineNum, text) ->
+                    Text(
+                        text = stringResource(R.string.line_label, lineNum),
+                        fontFamily = ChakraPetch,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = text,
+                        fontFamily = ChakraPetch,
+                        fontWeight = FontWeight.Light,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(12.dp))
+                }
+            }
+
+            // relating hexagram
+            reading.relatingHex?.let { relating ->
+                Spacer(Modifier.height(12.dp))
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
+                Spacer(Modifier.height(24.dp))
+
+                Text(
+                    text = stringResource(R.string.changing_to),
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    letterSpacing = 4.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.hexagram_label, relating.hex, reading.relatingName ?: relating.english),
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
+                    letterSpacing = 2.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = relating.tradChinese,
+                    fontFamily = ChakraPetch,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                )
+
+                Spacer(Modifier.height(24.dp))
+
+                // relating judgment
+                Text(
+                    text = stringResource(R.string.the_judgment),
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    letterSpacing = 4.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = relating.judgment.text,
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(Modifier.height(24.dp))
+
+                // relating image
+                Text(
+                    text = stringResource(R.string.image),
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    letterSpacing = 4.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = relating.image.text,
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            Spacer(Modifier.height(32.dp))
+
+            Button(
+                onClick = onSave,
+                enabled = !isSaved,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    Icons.Default.Save,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = stringResource(if (isSaved) R.string.saved else R.string.save_reading),
+                    fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 2.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

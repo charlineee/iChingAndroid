@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,16 +42,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ichingandroid.R
+import com.example.ichingandroid.R.string.book_of_changes
+import com.example.ichingandroid.R.string.cast_again
+import com.example.ichingandroid.R.string.iching_chinese
+import com.example.ichingandroid.R.string.throw_coins
 import com.example.ichingandroid.model.Hexagram
 import com.example.ichingandroid.ui.theme.ChakraPetch
 import com.example.ichingandroid.ui.theme.IchingandroidTheme
 import com.example.ichingandroid.ui.theme.LineTint
 import com.example.ichingandroid.ui.theme.LocalIsDarkTheme
 import kotlinx.coroutines.delay
-import com.example.ichingandroid.R.string.cast_again
-import com.example.ichingandroid.R.string.throw_coins
-import com.example.ichingandroid.R.string.iching_chinese
-import com.example.ichingandroid.R.string.book_of_changes
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun CastScreen(
@@ -56,13 +61,15 @@ fun CastScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     isDarkTheme: Boolean = LocalIsDarkTheme.current,
     onToggleTheme: () -> Unit = {},
-    onNavigateToResult: (Hexagram) -> Unit = {}
+    onOpenHistory: () -> Unit = {},
+    onNavigateToResult: (Hexagram, String) -> Unit = { _, _ -> }
 ) {
     var isFlipping by remember { mutableStateOf(false) }
     var coinFaces by remember { mutableStateOf(listOf("heads", "heads", "heads")) }
     val throws by viewModel.throws.collectAsState()
     val hexagram by viewModel.hexagram.collectAsState()
     val isComplete by viewModel.isComplete.collectAsState()
+    val inputState = rememberTextFieldState()
 
     Box(
         modifier = modifier
@@ -131,6 +138,10 @@ fun CastScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            OutlinedTextField(
+                state = inputState,
+                placeholder = { Text(stringResource(R.string.question_input_placeholder)) }
+            )
             // Action button
             Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -190,7 +201,7 @@ fun CastScreen(
                 hexagram?.let {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "Hexagram ${it.primaryNumber}: ${it.primaryName}",
+                            text = stringResource(R.string.hexagram_label, it.primaryNumber, it.primaryName),
                             color = MaterialTheme.colorScheme.onBackground,
                             fontFamily = ChakraPetch,
                             fontWeight = FontWeight.Light,
@@ -200,7 +211,7 @@ fun CastScreen(
                         if (it.hasChangingLines) {
                             it.relatingName?.let { name ->
                                 Text(
-                                    text = "→ ${it.relatingNumber}: $name",
+                                    text = stringResource(R.string.relating_hex_label, it.relatingNumber ?: 0, name),
                                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                                 )
                             }
@@ -224,7 +235,7 @@ fun CastScreen(
                             .align(Alignment.TopCenter)
                     )
                     TextButton(
-                        onClick = { hexagram?.let { onNavigateToResult(it) } },
+                        onClick = { hexagram?.let { onNavigateToResult(it, inputState.text.toString()) } },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
@@ -251,7 +262,23 @@ fun CastScreen(
                 painter = painterResource(
                     if (isDarkTheme) R.drawable.ic_light_mode else R.drawable.dark
                 ),
-                contentDescription = if (isDarkTheme) "Switch to light mode" else "Switch to dark mode",
+                contentDescription = stringResource(
+                    if (isDarkTheme) R.string.switch_to_light_mode else R.string.switch_to_dark_mode
+                ),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        // History button
+        IconButton(
+            onClick = onOpenHistory,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.History,
+                contentDescription = stringResource(R.string.history_content_description),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
@@ -259,7 +286,7 @@ fun CastScreen(
 
     LaunchedEffect(isFlipping) {
         if (isFlipping) {
-            delay(600)
+            delay(600.milliseconds)
             isFlipping = false
         }
     }

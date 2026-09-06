@@ -10,4 +10,24 @@
     <string name="changing_lines">CHANGING LINES</string>
     <string name="changing_to">CHANGING TO</string>
     <string name="hexagram_label">Hexagram %1$d: %2$s</string>
+
+    <!-- History Drawer -->
+    <string name="history_title">HISTORY</string>
+    <string name="clear_history">Clear History</string>
+    <string name="no_question">No question</string>
+    <string name="delete_content_description">Delete</string>
+    <string name="history_content_description">History</string>
+
+    <!-- Cast Screen -->
+    <string name="type_your_question">Type your question</string>
+    <string name="switch_to_light_mode">Switch to light mode</string>
+    <string name="switch_to_dark_mode">Switch to dark mode</string>
+
+    <!-- Hexagram Result -->
+    <string name="back_content_description">Back</string>
+    <string name="line_label">Line %1$d</string>
+    <string name="saved">SAVED</string>
+    <string name="save_reading">SAVE READING</string>
+    <string name="relating_hex_label">→ %1$d: %2$s</string>
+    <string name="question_input_placeholder">Your question</string>
 </resources>

@@ -2,10 +2,19 @@ package com.example.ichingandroid.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.ichingandroid.data.HexagramData
 import com.example.ichingandroid.data.IChingRepository
+import com.example.ichingandroid.data.ReadingEntity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class HexagramResultViewModel(private val repository: IChingRepository) : ViewModel() {
+
+    private val _isSaved = MutableStateFlow(false)
+    val isSaved: StateFlow<Boolean> = _isSaved.asStateFlow()
 
     data class ReadingResult(
         val primaryHex: HexagramData,
@@ -28,13 +37,58 @@ class HexagramResultViewModel(private val repository: IChingRepository) : ViewMo
 
         return ReadingResult(
             primaryHex = primary,
-            primaryName = IChingViewModel.HEXAGRAM_NAMES[primaryHexNumber] ?: primary.english,
+            primaryName = HexagramCalculator.HEXAGRAM_NAMES[primaryHexNumber] ?: primary.english,
             relatingHex = relating,
-            relatingName = relating?.let { IChingViewModel.HEXAGRAM_NAMES[it.hex] ?: it.english },
+            relatingName = relating?.let { HexagramCalculator.HEXAGRAM_NAMES[it.hex] ?: it.english },
             changingLines = changingLines,
             judgment = primary.judgment.text,
             image = primary.image.text
         )
+    }
+
+    fun saveReading(
+        question: String,
+        primaryHexNumber: Int,
+        relatingHexNumber: Int?,
+        changingLineNumbers: List<Int>
+    ) {
+        viewModelScope.launch {
+            val existing = repository.findReading(
+                question = question,
+                primaryHex = primaryHexNumber,
+                relatingHex = relatingHexNumber,
+                changingLines = changingLineNumbers
+            )
+            if (existing == null) {
+                repository.saveReading(
+                    ReadingEntity(
+                        question = question,
+                        timestamp = System.currentTimeMillis(),
+                        primaryHexNumber = primaryHexNumber,
+                        relatingHexNumber = relatingHexNumber,
+                        changingLineNumbers = changingLineNumbers
+                    )
+                )
+                _isSaved.value = true
+            }
+        }
+    }
+
+    fun checkSavedStatus(
+        question: String,
+        primaryHexNumber: Int,
+        relatingHexNumber: Int?,
+        changingLineNumbers: List<Int>
+    ) {
+        viewModelScope.launch {
+            val existing = repository.findReading(
+                question = question,
+                primaryHex = primaryHexNumber,
+                relatingHex = relatingHexNumber,
+                changingLines = changingLineNumbers
+            )
+            _isSaved.value = existing != null
+        }
     }
 
     companion object Companion {
