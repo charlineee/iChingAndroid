@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "ichingandroid"
 include(":app")
+include(":shared")
  

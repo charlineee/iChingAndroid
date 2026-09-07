@@ -1,4 +1,4 @@
-package com.example.ichingandroid.ui
+package com.example.ichingandroid.domain
 
 import com.example.ichingandroid.model.CoinThrow
 import com.example.ichingandroid.model.Hexagram

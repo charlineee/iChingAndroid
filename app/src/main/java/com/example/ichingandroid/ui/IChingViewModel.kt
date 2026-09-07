@@ -2,6 +2,7 @@ package com.example.ichingandroid.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ichingandroid.domain.HexagramCalculator
 import com.example.ichingandroid.model.CoinThrow
 import com.example.ichingandroid.model.Hexagram
 import com.example.ichingandroid.model.LineType

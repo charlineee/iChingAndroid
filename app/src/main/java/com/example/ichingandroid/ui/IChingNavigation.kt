@@ -14,7 +14,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.ichingandroid.data.AppDatabase
 import com.example.ichingandroid.data.IChingRepository
 import com.example.ichingandroid.model.Hexagram
 import kotlinx.coroutines.launch
@@ -26,8 +25,10 @@ fun IChingNavigation(
     val backStack = rememberNavBackStack(CastRoute)
     val context = LocalContext.current
     val repository = remember {
-        val database = AppDatabase.getDatabase(context)
-        IChingRepository(context, database.readingDao())
+        val database = com.example.ichingandroid.data.provideDatabaseBuilder().build()
+        val jsonString = context.assets.open("iching_wilhelm_translation.json")
+            .bufferedReader().use { it.readText() }
+        IChingRepository(database.readingDao(), jsonString)
     }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

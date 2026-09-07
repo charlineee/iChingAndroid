@@ -17,6 +17,7 @@ import com.example.ichingandroid.ui.theme.IchingandroidTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        com.example.ichingandroid.data.appContext = applicationContext
         enableEdgeToEdge()
         setContent {
             // default dark theme, changable by user

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.ichingandroid.data.HexagramData
 import com.example.ichingandroid.data.IChingRepository
 import com.example.ichingandroid.data.ReadingEntity
+import com.example.ichingandroid.domain.HexagramCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

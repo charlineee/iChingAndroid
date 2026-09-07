@@ -2,6 +2,7 @@ package com.example.ichingandroid.data
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 class DatabaseConverters {
     @TypeConverter

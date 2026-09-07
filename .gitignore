@@ -1,6 +1,10 @@
 # Built outputs
 /build/
 app/build/
+shared/build/
+iosApp/build/
+.kotlin/
+.apple/
 
 # Gradle
 .gradle/
