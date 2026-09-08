@@ -36,12 +36,18 @@ fun Coin(
     LaunchedEffect(isFlipping) {
         if (isFlipping) {
             offsetY.animateTo(
-                targetValue = -500f,
-                animationSpec = tween(250, easing = FastOutLinearInEasing)
+                targetValue = UIConstants.COIN_FLIP_TARGET_OFFSET,
+                animationSpec = tween(
+                    UIConstants.COIN_FLIP_UP_DURATION,
+                    easing = FastOutLinearInEasing
+                )
             )
             offsetY.animateTo(
                 targetValue = 0f,
-                animationSpec = tween(350, easing = LinearOutSlowInEasing)
+                animationSpec = tween(
+                    UIConstants.COIN_FLIP_DOWN_DURATION,
+                    easing = LinearOutSlowInEasing
+                )
             )
         } else {
             offsetY.snapTo(0f)

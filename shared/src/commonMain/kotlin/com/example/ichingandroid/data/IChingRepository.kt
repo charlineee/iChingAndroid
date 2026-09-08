@@ -33,6 +33,8 @@ open class IChingRepository(
 
     // Database operations
     open fun getAllReadings(): Flow<List<ReadingEntity>> = readingDao.getAllReadings()
+    
+    open suspend fun fetchHistory(): List<ReadingEntity> = readingDao.getHistory()
 
     open suspend fun saveReading(reading: ReadingEntity) {
         readingDao.insertReading(reading)

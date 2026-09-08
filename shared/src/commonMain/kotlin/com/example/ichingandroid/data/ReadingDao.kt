@@ -12,6 +12,9 @@ interface ReadingDao {
     @Query("SELECT * FROM readings ORDER BY timestamp DESC")
     fun getAllReadings(): Flow<List<ReadingEntity>>
 
+    @Query("SELECT * FROM readings ORDER BY timestamp DESC")
+    suspend fun getHistory(): List<ReadingEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReading(reading: ReadingEntity)
 

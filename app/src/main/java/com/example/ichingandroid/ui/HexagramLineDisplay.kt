@@ -23,7 +23,7 @@ private val yinLines  = listOf(R.drawable.yinline1,  R.drawable.yinline2)
 
 @Composable
 fun HexagramLineDisplay(
-    throws: List<CoinThrow>,
+    coinThrows: List<CoinThrow>,
     modifier: Modifier = Modifier,
     isComplete: Boolean = false
 ) {
@@ -34,7 +34,7 @@ fun HexagramLineDisplay(
         verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Bottom),
         modifier = modifier.fillMaxSize()
     ) {
-        throws.reversed().forEach { t ->
+        coinThrows.reversed().forEach { t ->
             val drawable = when (t.lineType) {
                 LineType.YANG,
                 LineType.YANG_CHANGING -> yangLines[t.drawableVariant]
@@ -48,7 +48,7 @@ fun HexagramLineDisplay(
                 contentDescription = t.lineType.name,
                 colorFilter = ColorFilter.tint(tint),
                 modifier = Modifier
-                    .fillMaxWidth(0.6f)
+                    .fillMaxWidth(UIConstants.HEXAGRAM_DISPLAY_WIDTH_FRACTION)
                     .height(24.dp)
             )
         }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class HistoryViewModel(private val repository: IChingRepository) : ViewModel() {
 
     val readings: StateFlow<List<ReadingEntity>> = repository.getAllReadings()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(UIConstants.HISTORY_SUBSCRIPTION_TIMEOUT), emptyList())
 
     fun deleteReading(reading: ReadingEntity) {
         viewModelScope.launch {

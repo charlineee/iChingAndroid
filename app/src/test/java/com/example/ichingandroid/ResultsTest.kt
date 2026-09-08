@@ -2,9 +2,13 @@ package com.example.ichingandroid
 
 import com.example.ichingandroid.data.HexagramData
 import com.example.ichingandroid.data.IChingRepository
+import com.example.ichingandroid.data.ReadingDao
+import com.example.ichingandroid.data.ReadingEntity
 import com.example.ichingandroid.data.WilhelmLine
 import com.example.ichingandroid.data.WilhelmText
 import com.example.ichingandroid.ui.HexagramResultViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -16,7 +20,21 @@ import org.junit.Test
  * Fake repository that bypasses Android Context / AssetManager so we can
  * run HexagramResultViewModel logic in plain JVM unit tests.
  */
-class FakeIChingRepository : IChingRepository(context = null) {
+class FakeReadingDao : ReadingDao {
+    override fun getAllReadings(): Flow<List<ReadingEntity>> = flowOf(emptyList())
+    override suspend fun getHistory(): List<ReadingEntity> = emptyList()
+    override suspend fun insertReading(reading: ReadingEntity) { /* no-op */ }
+    override suspend fun findReading(
+        question: String,
+        primaryHex: Int,
+        relatingHex: Int?,
+        changingLines: List<Int>
+    ): ReadingEntity? = null
+    override suspend fun deleteReading(reading: ReadingEntity) { /* no-op */ }
+    override suspend fun clearHistory() { /* no-op */ }
+}
+
+class FakeIChingRepository : IChingRepository(FakeReadingDao(), "{}") {
 
     private val fakeData: Map<String, HexagramData> = mapOf(
         "1" to HexagramData(
@@ -62,6 +80,7 @@ class FakeIChingRepository : IChingRepository(context = null) {
         return lineNumbers.associateWith { line -> hex.lines[line.toString()]?.text ?: "" }
     }
 }
+
 
 class HexagramResultViewModelTest {
 
@@ -181,9 +200,10 @@ class HexagramResultViewModelTest {
             relatingHexNumber = 2,
             changingLineNumbers = emptyList()
         )!!
-        assertNotNull(result.relatingHex)
-        assertEquals(2, result.relatingHex!!.hex)
-        assertEquals("The Receptive", result.relatingHex!!.english)
+        val relating = result.relatingHex
+        assertNotNull(relating)
+        assertEquals(2, relating?.hex)
+        assertEquals("The Receptive", relating?.english)
     }
 
     @Test

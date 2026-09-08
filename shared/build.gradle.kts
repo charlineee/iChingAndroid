@@ -17,6 +17,10 @@ kotlin {
         minSdk = 24
     }
     
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -42,5 +46,4 @@ dependencies {
     add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-    add("kspCommonMainMetadata", libs.androidx.room.compiler)
 }

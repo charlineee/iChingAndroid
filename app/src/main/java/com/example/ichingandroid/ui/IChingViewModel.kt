@@ -16,37 +16,42 @@ import kotlin.random.Random
 
 class IChingViewModel : ViewModel() {
 
-    private val _throws = MutableStateFlow<List<CoinThrow>>(emptyList())
-    val throws: StateFlow<List<CoinThrow>> = _throws.asStateFlow()
+    private val _coinThrows = MutableStateFlow<List<CoinThrow>>(emptyList())
+    val coinThrows: StateFlow<List<CoinThrow>> = _coinThrows.asStateFlow()
 
-    val isComplete: StateFlow<Boolean> = _throws
-        .map { it.size >= 6 }
+    val isComplete: StateFlow<Boolean> = _coinThrows
+        .map { it.size == UIConstants.HEXAGRAM_LINE_COUNT }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    val hexagram: StateFlow<Hexagram?> = _throws
-        .map { if (it.size == 6) buildHexagram(it) else null }
+    val hexagram: StateFlow<Hexagram?> = _coinThrows
+        .map { if (it.size == UIConstants.HEXAGRAM_LINE_COUNT) buildHexagram(it) else null }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     fun throwCoins(): CoinThrow {
-        val coins = List(3) { if (Random.nextBoolean()) "heads" else "tails" }
-        val sum = coins.fold(0) { acc, coin -> acc + if (coin == "heads") 3 else 2 }
+        val coins = List(UIConstants.COIN_COUNT) { if (Random.nextBoolean()) "heads" else "tails" }
+        val sum = coins.fold(0) {
+            acc, coin -> acc + if (coin == "heads") IChingLogic.COIN_HEADS_VALUE else IChingLogic.COIN_TAILS_VALUE }
         val lineType = when (sum) {
-            6    -> LineType.YIN_CHANGING
-            7    -> LineType.YANG
-            8    -> LineType.YIN
-            else -> LineType.YANG_CHANGING
+            IChingLogic.SUM_YIN_CHANGING    -> LineType.YIN_CHANGING
+            IChingLogic.SUM_YANG            -> LineType.YANG
+            IChingLogic.SUM_YIN             -> LineType.YIN
+            else                            -> LineType.YANG_CHANGING
         }
         val coinThrow = CoinThrow(coins, sum, lineType)
-        _throws.value = _throws.value + coinThrow
+        
+        if (_coinThrows.value.size < UIConstants.HEXAGRAM_LINE_COUNT) {
+            _coinThrows.value += coinThrow
+        }
+        
         return coinThrow
     }
 
 
     fun reset() {
-        _throws.value = emptyList()
+        _coinThrows.value = emptyList()
     }
 
-    private fun buildHexagram(throws: List<CoinThrow>): Hexagram {
-        return HexagramCalculator.buildHexagram(throws)
+    private fun buildHexagram(coinThrows: List<CoinThrow>): Hexagram {
+        return HexagramCalculator.buildHexagram(coinThrows)
     }
 }

@@ -13,7 +13,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun readingDao(): ReadingDao
 }
 
-expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase>
+expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
+}
 
 fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
     return provideDatabaseBuilder()

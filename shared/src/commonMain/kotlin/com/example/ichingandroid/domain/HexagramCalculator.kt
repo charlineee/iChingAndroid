@@ -6,8 +6,8 @@ import com.example.ichingandroid.model.LineType
 
 object HexagramCalculator {
 
-    fun buildHexagram(throws: List<CoinThrow>): Hexagram {
-        val lines = throws.map { it.lineType }
+    fun buildHexagram(coinThrows: List<CoinThrow>): Hexagram {
+        val lines = coinThrows.map { it.lineType }
         val primaryBinary = lines.map { it.isYang() }
 
         val relatingBinary = lines.map {

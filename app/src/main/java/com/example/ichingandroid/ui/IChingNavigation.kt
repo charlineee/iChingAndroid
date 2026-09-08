@@ -15,6 +15,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.ichingandroid.data.IChingRepository
+import com.example.ichingandroid.data.provideDatabaseBuilder
 import com.example.ichingandroid.model.Hexagram
 import kotlinx.coroutines.launch
 
@@ -25,7 +26,7 @@ fun IChingNavigation(
     val backStack = rememberNavBackStack(CastRoute)
     val context = LocalContext.current
     val repository = remember {
-        val database = com.example.ichingandroid.data.provideDatabaseBuilder().build()
+        val database = provideDatabaseBuilder().build()
         val jsonString = context.assets.open("iching_wilhelm_translation.json")
             .bufferedReader().use { it.readText() }
         IChingRepository(database.readingDao(), jsonString)
@@ -62,30 +63,26 @@ fun IChingNavigation(
         ) { key ->
             when (key) {
                 is CastRoute -> NavEntry(key) {
-                    val castViewModel: IChingViewModel = viewModel()
-                    val onOpenHistory = remember(scope, drawerState) {
-                        { scope.launch { drawerState.open() }; Unit }
-                    }
-                    val onNavigateToResult = remember(backStack) {
-                        { hexagram: Hexagram, question: String ->
-                            val changingIndices = hexagram.lines
-                                .mapIndexedNotNull { i, line -> if (line.isChanging()) i + 1 else null }
-                            backStack.add(
-                                ResultRoute(
-                                    primaryHexNumber = hexagram.primaryNumber,
-                                    relatingHexNumber = hexagram.relatingNumber,
-                                    changingLineIndices = changingIndices,
-                                    question = question
-                                )
+                    val onOpenHistory = { scope.launch { drawerState.open() }; Unit }
+                    val onNavigateToResult = { hexagram: Hexagram, question: String ->
+                        val changingIndices = hexagram.lines
+                            .mapIndexedNotNull { i, line -> if (line.isChanging()) i + 1 else null }
+                        backStack.add(
+                            ResultRoute(
+                                primaryHexNumber = hexagram.primaryNumber,
+                                relatingHexNumber = hexagram.relatingNumber,
+                                changingLineIndices = changingIndices,
+                                question = question
                             )
-                            Unit
-                        }
+                        )
+                        Unit
                     }
                     CastScreen(
-                        viewModel = castViewModel,
-                        onToggleTheme = onToggleTheme,
-                        onOpenHistory = onOpenHistory,
-                        onNavigateToResult = onNavigateToResult
+                        actions = CastScreenActions(
+                            onToggleTheme = onToggleTheme,
+                            onOpenHistory = onOpenHistory,
+                            onNavigateToResult = onNavigateToResult
+                        )
                     )
                 }
                 is ResultRoute -> NavEntry(key) {

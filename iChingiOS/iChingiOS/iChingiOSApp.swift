@@ -1,8 +1,14 @@
+//
+//  iChingiOSApp.swift
+//  iChingiOS
+//
+//  Created by charline on 9/7/26.
+//
+
 import SwiftUI
-import SharedKit
 
 @main
-struct iosApp: App {
+struct iChingiOSApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
